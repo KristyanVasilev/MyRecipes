@@ -1,0 +1,43 @@
+﻿@model MyRecipes.Web.ViewModels.Recipes.CreateRecipeInputModel
+@{
+    this.ViewData["Title"] = "Add new recipe";
+    var categoryItems = this.Model.CategoriesItems.Select(x => new SelectListItem(x.Value, x.Key));
+}
+
+
+<form method="post" class="col-md-6 offset-md-3">
+    <h1>Add new recipe!</h1>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Instructions" class="form-label"></label>
+        <textarea asp-for="Instructions" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <span asp-validation-for="Instructions" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PreparationTime" class="form-label"></label>
+        <input asp-for="PreparationTime" class="form-control">
+        <span asp-validation-for="PreparationTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CookingTime" class="form-label"></label>
+        <input asp-for="CookingTime" class="form-control">
+        <span asp-validation-for="CookingTime" class="text-danger"></span>
+    </div>
+     <div class="mb-3">
+        <label asp-for="PortionsCount" class="form-label"></label>
+        <input asp-for="PortionsCount" class="form-control">
+        <span asp-validation-for="PortionsCount" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" class="form-control" asp-items="categoryItems"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <input type="submit" class="btn btn-primary"/>
+</form>
