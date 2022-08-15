@@ -1,9 +1,19 @@
 ﻿@using MyRecipes.Common
+@model MyRecipes.Web.ViewModels.Home.IndexViewModel
 @{
     this.ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <p>We have:</p>
+    <div class="col-md-4 offset-md-4">
+    <ul class="list-group-item">
+        <li class="list-group-item bg-primary">Recipes: @Model.RecipesCount</li>
+        <li class="list-group-item bg-secondary">Categories: @Model.CategoriesCount</li>
+        <li class="list-group-item bg-primary">Ingredients: @Model.IngredientsCount</li>
+        <li class="list-group-item bg-secondary">Images: @Model.ImagesCount</li>
+    </ul>
+    </div>
 </div>
