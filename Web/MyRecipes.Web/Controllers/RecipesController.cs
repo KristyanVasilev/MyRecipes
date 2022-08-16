@@ -1,5 +1,7 @@
 ﻿namespace MyRecipes.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using MyRecipes.Services.Data;
     using MyRecipes.Web.ViewModels.Recipes;
@@ -7,10 +9,12 @@
     public class RecipesController : Controller
     {
         private readonly ICategoriesService categoriesService;
+        private readonly IRecipesService recipesService;
 
-        public RecipesController(ICategoriesService categoriesService)
+        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService)
         {
             this.categoriesService = categoriesService;
+            this.recipesService = recipesService;
         }
 
         public IActionResult Create()
@@ -21,7 +25,7 @@
         }
 
         [HttpPost]
-        public IActionResult Create(CreateRecipeInputModel input)
+        public async Task<IActionResult> Create(CreateRecipeInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
@@ -29,6 +33,7 @@
                 return this.View(input);
             }
 
+            await this.recipesService.CreateAsync(input);
             //return to recipe info page
             return this.Redirect("/");
         }

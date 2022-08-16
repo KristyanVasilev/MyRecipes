@@ -28,7 +28,7 @@
         <input asp-for="CookingTime" class="form-control">
         <span asp-validation-for="CookingTime" class="text-danger"></span>
     </div>
-     <div class="mb-3">
+    <div class="mb-3">
         <label asp-for="PortionsCount" class="form-label"></label>
         <input asp-for="PortionsCount" class="form-control">
         <span asp-validation-for="PortionsCount" class="text-danger"></span>
@@ -38,6 +38,21 @@
         <select asp-for="CategoryId" class="form-control" asp-items="categoryItems"></select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-
-    <input type="submit" class="btn btn-primary"/>
+    <div class="mb-3">
+        <label asp-for="Ingredients" id="IngredientsContainer"></label>
+        <a class="btn btn-success" onclick="AddMoreIngredients()">Add</a>
+    </div>
+    <input type="submit" class="btn btn-primary" />
 </form>
+
+@section Scripts{
+    <script>
+        var ingredientsIndex = 0;
+        function AddMoreIngredients() {
+           console.log("AddMoreIngredients()");
+            $("#IngredientsContainer")
+                .append("<div class = 'form-control'> Name <input type='text' name='Ingredients["+ingredientsIndex+"].Name'/></div> <div class = 'form-control'>Quantity <input type='text' name='Ingredients["+ingredientsIndex+"].Quantity'/> </div>")
+            ingredientsIndex ++;
+        }
+    </script>
+}
