@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -15,13 +16,15 @@
         private readonly IDeletableEntityRepository<Recipe> recipeRepository;
         private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
 
-        public RecipesService(IDeletableEntityRepository<Recipe> recipesRepository, IDeletableEntityRepository<Ingredient> ingredientsRepository)
+        public RecipesService(
+            IDeletableEntityRepository<Recipe> recipesRepository,
+            IDeletableEntityRepository<Ingredient> ingredientsRepository)
         {
             this.recipeRepository = recipesRepository;
             this.ingredientsRepository = ingredientsRepository;
         }
 
-        public async Task CreateAsync(CreateRecipeInputModel input, string userId)
+        public async Task CreateAsync(CreateRecipeInputModel input, string userId, string imagePath)
         {
             var recipe = new Recipe
             {
@@ -33,24 +36,50 @@
                 UserId = userId,
             };
 
-            if (input.Ingredients != null)
-            {
-                foreach (var currIngredient in input.Ingredients)
-                {
-                    var ingredient = this.ingredientsRepository.All().FirstOrDefault(x => x.Name == currIngredient.Name);
-                    if (ingredient == null)
-                    {
-                        ingredient = new Ingredient
-                        {
-                            Name = currIngredient.Name,
-                        };
-                    }
 
-                    recipe.Ingredients.Add(new RecipeIngredient
+            foreach (var currIngredient in input.Ingredients)
+            {
+                var ingredient = this.ingredientsRepository.All().FirstOrDefault(x => x.Name == currIngredient.Name);
+                if (ingredient == null)
+                {
+                    ingredient = new Ingredient
                     {
-                        Ingredient = ingredient,
-                        Quantity = currIngredient.Quantity,
-                    });
+                        Name = currIngredient.Name,
+                    };
+                }
+
+                recipe.Ingredients.Add(new RecipeIngredient
+                {
+                    Ingredient = ingredient,
+                    Quantity = currIngredient.Quantity,
+                });
+            }
+
+            var allowedExtensions = new[] { "jpg", "png" };
+            Directory.CreateDirectory($"{imagePath}/recipes/");
+
+            foreach (var image in input.Images)
+            {
+                var extension = Path.GetExtension(image.FileName).TrimStart('.');
+
+                if (!allowedExtensions.Any(x => extension.EndsWith(x)))
+                {
+                    throw new Exception($"Invalid image extension {extension}");
+                }
+
+                var dbImage = new Image
+                {
+                    UserId = userId,
+                    Extension = extension,
+                };
+
+                recipe.Images.Add(dbImage);
+
+                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}.{extension}";
+
+                using (Stream fileStream = new FileStream(physicalPath, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
                 }
             }
 
@@ -60,15 +89,15 @@
 
         public IEnumerable<T> GetAll<T>(int pageNumber, int itemsPerPage = 12)
         {
-           var recipes = this.recipeRepository.AllAsNoTracking()
-                .OrderByDescending(x => x.Id)
-                .Skip((pageNumber - 1) * itemsPerPage)
-                .Take(itemsPerPage)
-                .To<T>()
-                .ToList();
+            var recipes = this.recipeRepository.AllAsNoTracking()
+                 .OrderByDescending(x => x.Id)
+                 .Skip((pageNumber - 1) * itemsPerPage)
+                 .Take(itemsPerPage)
+                 .To<T>()
+                 .ToList();
             // formula for pagination (pageNumber - 1) * itemsPerPage
 
-           return recipes;
+            return recipes;
         }
 
         public int GetRecipesCount()
