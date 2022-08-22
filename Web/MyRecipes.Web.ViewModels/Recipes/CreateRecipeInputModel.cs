@@ -25,6 +25,8 @@
         [Range(1, 100)]
         public int PortionsCount { get; set; }
 
+        public string ImageUrl { get; set; }
+
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 

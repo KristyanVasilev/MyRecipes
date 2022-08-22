@@ -1,10 +1,16 @@
 ﻿namespace MyRecipes.Services.Data
 {
-    using MyRecipes.Web.ViewModels.Recipes;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using MyRecipes.Web.ViewModels.Recipes;
 
     public interface IRecipesService
     {
-        Task CreateAsync(CreateRecipeInputModel input);
+        Task CreateAsync(CreateRecipeInputModel input, string userId);
+
+        IEnumerable<T> GetAll<T>(int pageNumber, int itemsPerPage = 12);
+
+        int GetRecipesCount();
     }
 }
