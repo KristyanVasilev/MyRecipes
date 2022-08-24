@@ -7,11 +7,13 @@
 <h1>@Model.Name</h1>
 <h3> Category - @Model.CategoryName</h3>
 <hr />
+
 <div class="row">
     <div class="col-sm">
         <img class="rounded mx-auto d-block" src="@Model.Image" width="500" height="500" alt="Generic placeholder image">
     </div>
     <div class="col-sm">
+        <p></p>
         <p><b><i class="fas fa-user"></i></i> User: </b>@Model.UserUserName</p>
         <p><i class="fas fa-calendar-alt"></i><b> Created on: </b>@Model.CreatedOn</p>
         <p><i class="fas fa-clock"></i><b> Preparation time: </b>@Model.PreparationTime</p>
@@ -19,8 +21,18 @@
         <p><i class="fas fa-cheese"></i><b> Portions count: </b>@Model.PortionsCount</p>
         <p><i class="far fa-comment"></i><b> Instructions: </b>@Model.Instructions</p>
     </div>
-</div>  
-<hr/>
+    <div class="col-md-6 offset-md-6">
+        <ul class="star-rating">
+            <li class="star-fill" data-vote="1"><i class="fas fa-star"></i></li>
+            <li class="star-fill" data-vote="2"><i class="fas fa-star"></i></li>
+            <li class="star-fill" data-vote="3"><i class="fas fa-star"></i></li>
+            <li class="star-fill" data-vote="4"><i class="far fa-star"></i></li>
+            <li class="star-fill" data-vote="5"><i class="far fa-star"></i></li>
+            <li> <span id="averageVoteValue">@Model.AverageVote.ToString("0:0")</span><span> / 5</span></li>        
+        </ul>
+    </div>
+</div>
+<hr />
 <table class="table">
     <thead>
         <tr>
@@ -41,3 +53,31 @@
         }
     </tbody>
 </table>
+
+<form method="post" id="antiForgeryForm" >
+
+</form>
+@section Scripts {
+    <script>
+        $("li[data-vote]").each(function (el) {
+            $(this).click(function () {
+                var value = $(this).attr("data-vote");
+                var recipeId = @Model.Id;
+                var data = { recipeId: recipeId, value: value };
+                var antiForgeryToken = $('#antiForgeryForm input[name=__RequestVerificationToken]').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Vote",
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-TOKEN': antiForgeryToken
+                    },
+                    success: function (data) {
+                        $('#averageVoteValue').html(data.averageVote.toFixed(1));
+                    },
+                    contentType: 'application/json'
+                });
+            })
+        });
+    </script>
+}
