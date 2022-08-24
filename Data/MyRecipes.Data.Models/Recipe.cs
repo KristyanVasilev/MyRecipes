@@ -11,6 +11,7 @@
         {
             this.Ingredients = new HashSet<RecipeIngredient>();
             this.Images = new HashSet<Image>();
+            this.Votes = new HashSet<Vote>();
         }
 
         public string Name { get; set; }
@@ -34,5 +35,7 @@
         public virtual ICollection<RecipeIngredient> Ingredients { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Vote> Votes { get; set; }
     }
 }
