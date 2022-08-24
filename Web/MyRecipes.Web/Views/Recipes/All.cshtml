@@ -1,6 +1,6 @@
 ﻿@model MyRecipes.Web.ViewModels.Recipes.RecipeListViewModel
 @{
-    this.ViewData["Title"] = "All Recipes";
+    this.ViewData["Title"] = "All Recipes, page " + Model.PageNumber;
 }
 
 <h1>@this.ViewData["Title"]</h1>
@@ -11,7 +11,7 @@
     <div class="media col-md-4">
         <img class="mr-3" src="@recipe.ImageUrl" width="100" alt="Generic placeholder image">
         <div class="media-body">
-            <h5 class="mt-0">@recipe.Name</h5>
+                <h5 class="mt-0"> <a asp-action="SingleRecipe" asp-route-id="@recipe.Id">@recipe.Name</a></h5>
             @recipe.CategoryName
         </div>
     </div>

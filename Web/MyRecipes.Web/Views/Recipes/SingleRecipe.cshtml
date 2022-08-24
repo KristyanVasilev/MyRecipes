@@ -1,0 +1,43 @@
+﻿@model MyRecipes.Web.ViewModels.Recipes.SingleRecipeViewModel
+@{
+    this.ViewData["Title"] = Model.Name;
+    var count = 1;
+}
+
+<h1>@Model.Name</h1>
+<h3> Category - @Model.CategoryName</h3>
+<hr />
+<div class="row">
+    <div class="col-sm">
+        <img class="rounded mx-auto d-block" src="@Model.Image" width="500" height="500" alt="Generic placeholder image">
+    </div>
+    <div class="col-sm">
+        <p><b>User: </b>@Model.UserUserName</p>
+        <p><b>Created on: </b>@Model.CreatedOn</p>
+        <p><b>Preparation time: </b>@Model.PreparationTime</p>
+        <p><b>Cooking time: </b>@Model.CookingTime</p>
+        <p><b>Portions count: </b>@Model.PortionsCount</p>
+        <p><b>Instructions: </b>@Model.Instructions</p>
+    </div>
+</div>  
+<hr/>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ingredient</th>
+            <th scope="col">Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ingredient in Model.Ingredients)
+        {
+            <tr>
+                <th scope="row">@count</th>
+                <td>@ingredient.IngredientName</td>
+                <td>@ingredient.Quantity</td>
+            </tr>
+            count++;
+        }
+    </tbody>
+</table>

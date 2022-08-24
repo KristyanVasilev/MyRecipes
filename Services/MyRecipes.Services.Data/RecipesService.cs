@@ -34,6 +34,7 @@
                 PreparationTime = TimeSpan.FromMinutes(input.PreparationTime),
                 PortionsCount = input.PortionsCount,
                 UserId = userId,
+                Instructions = input.Instructions,
             };
 
 
@@ -95,12 +96,19 @@
                  .Take(itemsPerPage)
                  .To<T>()
                  .ToList();
-            // formula for pagination (pageNumber - 1) * itemsPerPage
+            // Formula for pagination (pageNumber - 1) * itemsPerPage
 
             return recipes;
         }
 
         public int GetRecipesCount()
             => this.recipeRepository.All().Count();
+
+        public T GetSingleRecipe<T>(int id)
+            => this.recipeRepository
+                   .AllAsNoTracking()
+                   .Where(x => x.Id == id)
+                   .To<T>()
+                   .FirstOrDefault();
     }
 }

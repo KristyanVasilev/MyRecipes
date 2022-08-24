@@ -1,9 +1,10 @@
 ﻿namespace MyRecipes.Web.ViewModels.Recipes
 {
+    using System.Linq;
+
     using AutoMapper;
     using MyRecipes.Data.Models;
     using MyRecipes.Services.Mapping;
-    using System.Linq;
 
     public class RecipeInListViewModel : IMapFrom<Recipe>, IHaveCustomMappings
     {
