@@ -69,7 +69,7 @@
             services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IRecipesService, RecipesService>();
-            services.AddTransient<IVoteService, VoteService>();
+            services.AddTransient<IVoteService, VotesService>();
         }
 
         private static void Configure(WebApplication app)
