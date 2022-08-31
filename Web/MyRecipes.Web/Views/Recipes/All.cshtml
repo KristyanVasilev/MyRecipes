@@ -13,13 +13,15 @@
 @foreach (var recipe in this.Model.Recipes)
 {
     <div class="media col-md-4">
-        <img class="mr-3" src="@recipe.ImageUrl" width="100" alt="Generic placeholder image">
+        <img class="mr-3" src="@recipe.ImageUrl" width="100" height="125" alt="Generic placeholder image">
         <div class="media-body">
                 <h5 class="mt-0"> <a asp-action="SingleRecipe" asp-route-id="@recipe.Id">@recipe.Name</a></h5>
             @recipe.CategoryName
         </div>
+            <hr />
     </div>
 }
+    <hr />
 </div>
 <hr />
 <partial name="_PagingPartial" model="@Model" />
