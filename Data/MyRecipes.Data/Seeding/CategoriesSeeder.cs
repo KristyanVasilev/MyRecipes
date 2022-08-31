@@ -1,9 +1,10 @@
 ﻿namespace MyRecipes.Data.Seeding
 {
-    using MyRecipes.Data.Models;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using MyRecipes.Data.Models;
 
     public class CategoriesSeeder : ISeeder
     {
@@ -17,6 +18,7 @@
             await dbContext.Categories.AddAsync(new Category { Name = "Тарт" });
             await dbContext.Categories.AddAsync(new Category { Name = "Кекс" });
             await dbContext.Categories.AddAsync(new Category { Name = "Печено Свинско" });
+            await dbContext.Categories.AddAsync(new Category { Name = "Пица" });
 
             await dbContext.SaveChangesAsync();
         }
