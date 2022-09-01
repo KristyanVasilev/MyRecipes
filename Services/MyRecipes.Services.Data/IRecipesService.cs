@@ -16,5 +16,7 @@
         int GetRecipesCount();
 
         T GetSingleRecipe<T>(int id);
+
+        Task UpdateAsync(int id, EditRecipeViewModel input);
     }
 }

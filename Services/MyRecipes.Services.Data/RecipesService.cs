@@ -5,7 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.EntityFrameworkCore;
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
     using MyRecipes.Services.Mapping;
@@ -117,5 +117,19 @@
                    .Where(x => x.Id == id)
                    .To<T>()
                    .FirstOrDefault();
+
+        public async Task UpdateAsync(int id, EditRecipeViewModel input)
+        {
+            var recipe = await this.recipeRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            recipe.Name = input.Name;
+            recipe.Instructions = input.Instructions;
+            recipe.CookingTime = TimeSpan.FromMinutes(input.CookingTime);
+            recipe.PreparationTime = TimeSpan.FromMinutes(input.PreparationTime);
+            recipe.PortionsCount = input.PortionsCount;
+            recipe.CategoryId = input.CategoryId;
+
+            await this.recipeRepository.SaveChangesAsync();
+        }
     }
 }

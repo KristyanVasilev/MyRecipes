@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MyRecipes.Common;
     using MyRecipes.Data.Models;
     using MyRecipes.Services.Data;
     using MyRecipes.Web.ViewModels.Recipes;
@@ -64,6 +65,31 @@
 
             this.TempData["Message"] = "Recipe added successfuly!";
             return this.RedirectToAction("All");
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult Edit(int id)
+        {
+            var inputModel = this.recipesService.GetSingleRecipe<EditRecipeViewModel>(id);
+            inputModel.Id = id;
+            inputModel.CategoriesItems = this.categoriesService.GetCategories();
+            return this.View(inputModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Edit(int id, EditRecipeViewModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                input.Id = id;
+                input.CategoriesItems = this.categoriesService.GetCategories();
+                return this.View(input);
+            }
+
+            await this.recipesService.UpdateAsync(id, input);
+
+            return this.RedirectToAction(nameof(this.SingleRecipe), new { id });
         }
 
         public IActionResult All(int id = 1)
