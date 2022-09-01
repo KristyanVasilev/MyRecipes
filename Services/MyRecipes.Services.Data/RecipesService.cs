@@ -96,10 +96,17 @@
                  .Take(itemsPerPage)
                  .To<T>()
                  .ToList();
-            // Formula for pagination (pageNumber - 1) * itemsPerPage
 
+            // Formula for pagination (pageNumber - 1) * itemsPerPage
             return recipes;
         }
+
+        // Sorting recipes by random
+        public IEnumerable<T> GetRandom<T>(int count)
+            => this.recipeRepository.All().OrderBy(x => Guid.NewGuid())
+                .To<T>()
+                .Take(count)
+                .ToList();
 
         public int GetRecipesCount()
             => this.recipeRepository.All().Count();

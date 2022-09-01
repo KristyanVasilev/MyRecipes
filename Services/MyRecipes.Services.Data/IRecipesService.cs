@@ -11,6 +11,8 @@
 
         IEnumerable<T> GetAll<T>(int pageNumber, int itemsPerPage = 12);
 
+        IEnumerable<T> GetRandom<T>(int count);
+
         int GetRecipesCount();
 
         T GetSingleRecipe<T>(int id);
