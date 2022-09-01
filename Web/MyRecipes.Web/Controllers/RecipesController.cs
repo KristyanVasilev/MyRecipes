@@ -3,6 +3,7 @@
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -49,8 +50,8 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            // var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value; //information from coockies
 
+            // var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value; //information from cockies
             try
             {
                 await this.recipesService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
@@ -60,7 +61,6 @@
                 this.ModelState.AddModelError(string.Empty, ex.Message);
                 return this.View(input);
             }
-
 
             this.TempData["Message"] = "Recipe added successfuly!";
             return this.RedirectToAction("All");
