@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
@@ -88,25 +89,35 @@
             await this.recipeRepository.SaveChangesAsync();
         }
 
+        // Formula for pagination (pageNumber - 1) * itemsPerPage
         public IEnumerable<T> GetAll<T>(int pageNumber, int itemsPerPage = 12)
-        {
-            var recipes = this.recipeRepository.AllAsNoTracking()
-                 .OrderByDescending(x => x.Id)
-                 .Skip((pageNumber - 1) * itemsPerPage)
-                 .Take(itemsPerPage)
-                 .To<T>()
-                 .ToList();
-
-            // Formula for pagination (pageNumber - 1) * itemsPerPage
-            return recipes;
-        }
+            => this.recipeRepository
+                   .AllAsNoTracking()
+                   .OrderByDescending(x => x.Id)
+                   .Skip((pageNumber - 1) * itemsPerPage)
+                   .Take(itemsPerPage)
+                   .To<T>()
+                   .ToList();
 
         // Sorting recipes by random
         public IEnumerable<T> GetRandom<T>(int count)
             => this.recipeRepository.All().OrderBy(x => Guid.NewGuid())
-                .To<T>()
-                .Take(count)
-                .ToList();
+                   .To<T>()
+                   .Take(count)
+                   .ToList();
+
+        public IEnumerable<T> GetRecipeByIngredients<T>(IEnumerable<int> ingredientsIds)
+        {
+            var query = this.recipeRepository.All().AsQueryable();
+
+            // Натрупване на много критерий
+            foreach (var ingredientId in ingredientsIds)
+            {
+                query = query.Where(x => x.Ingredients.Any(i => i.IngredientId == ingredientId));
+            }
+
+            return query.To<T>().ToList();
+        }
 
         public int GetRecipesCount()
             => this.recipeRepository.All().Count();
