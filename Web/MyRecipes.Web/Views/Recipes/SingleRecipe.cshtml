@@ -29,7 +29,7 @@
             <li class="star-fill" data-vote="3"><i class="fas fa-star"></i></li>
             <li class="star-fill" data-vote="4"><i class="far fa-star"></i></li>
             <li class="star-fill" data-vote="5"><i class="far fa-star"></i></li>
-            <li> <span id="averageVoteValue">@Model.AverageVote.ToString("0:0")</span><span> / 5</span></li>        
+            <li> <span id="averageVoteValue">@Model.AverageVote.ToString("0:0")</span><span> / 5</span></li>
         </ul>
     </div>
 </div>
@@ -56,12 +56,14 @@
 </table>
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
-    <li class="single-meta">
-        <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
-    </li>
-}    
-<form method="post" id="antiForgeryForm" >
+    <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit</a>
+    <p></p>
+    <form method="post" id="de" asp-action="Delete" asp-route-id="@Model.Id">
+        <button class="btn btn-danger">Delete</button>
+    </form>
 
+}
+<form method="post" id="antiForgeryForm">
 </form>
 @section Scripts {
     <script>
@@ -87,3 +89,4 @@
         });
     </script>
 }
+

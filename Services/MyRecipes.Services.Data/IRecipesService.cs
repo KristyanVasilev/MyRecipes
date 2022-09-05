@@ -19,6 +19,8 @@
 
         Task UpdateAsync(int id, EditRecipeViewModel input);
 
+        Task DeleteAsync(int id);
+
         IEnumerable<T> GetRecipeByIngredients<T>(IEnumerable<int> ingredientsIds);
     }
 }

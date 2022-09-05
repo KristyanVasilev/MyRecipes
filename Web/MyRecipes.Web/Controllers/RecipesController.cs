@@ -92,6 +92,15 @@
             return this.RedirectToAction(nameof(this.SingleRecipe), new { id });
         }
 
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.recipesService.DeleteAsync(id);
+
+            return this.RedirectToAction("All");
+        }
+
         public IActionResult All(int id = 1)
         {
             const int itemsPerPage = 6;

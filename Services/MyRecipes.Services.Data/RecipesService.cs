@@ -89,6 +89,14 @@
             await this.recipeRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var recipe = this.recipeRepository.All().FirstOrDefault(x => x.Id == id);
+            this.recipeRepository.Delete(recipe);
+
+            await this.recipeRepository.SaveChangesAsync();
+        }
+
         // Formula for pagination (pageNumber - 1) * itemsPerPage
         public IEnumerable<T> GetAll<T>(int pageNumber, int itemsPerPage = 12)
             => this.recipeRepository
